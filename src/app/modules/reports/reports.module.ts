@@ -8,7 +8,9 @@ import { MatMenuModule } from '@angular/material/menu'
 import { ReportsResolver } from './reports.resolver'
 import { MatDividerModule } from '@angular/material/divider'
 import { MatTableModule } from '@angular/material/table'
-import { MatSortModule } from '@angular/material/sort'
+import { MatSortModule } from '@angular/material/sort';
+import { ReportFormComponent } from './report-form/report-form.component'
+import { MatDialogModule } from '@angular/material/dialog'
 
 const reportRoutes: Route[] = [
     {
@@ -22,7 +24,8 @@ const reportRoutes: Route[] = [
 
 @NgModule({
     declarations: [
-        ReportsComponent
+        ReportsComponent,
+        ReportFormComponent,
     ],
     imports: [
         RouterModule.forChild(reportRoutes),
@@ -35,7 +38,8 @@ const reportRoutes: Route[] = [
         MatSortModule,
         DatePipe,
         NgClass,
-        NgForOf
+        NgForOf,
+        MatDialogModule
     ]
 })
 export class ReportsModule { }

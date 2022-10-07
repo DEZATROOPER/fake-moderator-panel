@@ -3,6 +3,8 @@ import { ReportsService } from './reports.service'
 import { MatSort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
 import { Subject, takeUntil } from 'rxjs'
+import { MatDialog } from '@angular/material/dialog'
+import { ReportFormComponent } from './report-form/report-form.component'
 
 enum StatusType {
     'danger', 'warning', 'normal'
@@ -35,7 +37,7 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
     private _unsubscribeAll: Subject<any> = new Subject<any>()
 
 
-    constructor(private _reportsService: ReportsService) {
+    constructor(private _reportsService: ReportsService, private _dialog: MatDialog) {
     }
 
 
@@ -95,5 +97,13 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
         return true;
+    }
+
+    openDialog(report: any) {
+        this._dialog.open(ReportFormComponent, {
+            data: {
+                report: report
+            }
+        });
     }
 }
