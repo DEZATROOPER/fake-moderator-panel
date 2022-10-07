@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule, CurrencyPipe, DatePipe, NgClass } from '@angular/common'
+import { CommonModule, CurrencyPipe, DatePipe, NgClass, NgForOf } from '@angular/common'
 import { ReportsComponent } from './reports.component'
 import { Route, RouterModule } from '@angular/router'
 import { MatButtonModule } from '@angular/material/button'
@@ -34,7 +34,8 @@ const reportRoutes: Route[] = [
         MatTableModule,
         MatSortModule,
         DatePipe,
-        NgClass
+        NgClass,
+        NgForOf
     ]
 })
 export class ReportsModule { }
