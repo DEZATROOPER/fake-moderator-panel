@@ -16,7 +16,6 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('recentTransactionsTable', {read: MatSort}) recentTransactionsTableMatSort: MatSort
 
     data: any
-    accountBalanceOptions: ApexOptions
     recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource()
     recentTransactionsTableColumns: string[] = ['transactionId', 'date', 'name', 'amount', 'status']
     private _unsubscribeAll: Subject<any> = new Subject<any>()
