@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core'
 import { BehaviorSubject, Observable, tap } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
-import { Firestore, collection, collectionData } from '@angular/fire/firestore'
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +12,7 @@ export class ReportsService
     /**
      * Constructor
      */
-    constructor(private _httpClient: HttpClient, private firestore: Firestore)
+    constructor(private _httpClient: HttpClient)
     {
     }
 
@@ -38,10 +37,6 @@ export class ReportsService
      */
     getData(): Observable<any>
     {
-        const collection1 = collection(this.firestore, 'reports')
-
-        return collectionData(collection1);
-
         return this._httpClient.get('api/reports').pipe(
             tap((response: any) => {
                 this._data.next(response);
