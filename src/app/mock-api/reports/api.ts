@@ -30,7 +30,11 @@ export class ReportsMockApi {
         // -----------------------------------------------------------------------------------------------------
         this._fuseMockApiService
             .onGet('api/reports')
-            .reply(() => [200, cloneDeep(this._reports)])
+            .reply(() => {
+                 this._reports.report = this._reports.reports.sort((a,b) => b.count - a.count)
+
+                return [200, cloneDeep(this._reports)]
+            })
 
         this._fuseMockApiService
             .onPost('api/reports')
