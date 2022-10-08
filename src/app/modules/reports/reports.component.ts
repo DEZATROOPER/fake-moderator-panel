@@ -117,7 +117,7 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
 
         dialogRef.afterClosed().pipe(takeUntil(this._unsubscribeAll))
             .subscribe((result) => {
-                if (!result.report) {
+                if (!result?.report) {
                     return
                 }
 

@@ -1,12 +1,12 @@
 <h2 mat-dialog-title>Edit report status</h2>
 <mat-dialog-content>
-    <form class="flex flex-col mt-8 p-8 pb-4 bg-card rounded-2xl shadow overflow-hidden">
+    <form class="flex flex-col mt-8 p-4 overflow-hidden">
         <div class="flex flex-col">
             <strong class="w-full block">{{report.title}}</strong>
             <div class="w-full">{{report.date | date:'MMM dd, y'}}</div>
             <div class="w-full">Counter: {{report.count}}</div>
         </div>
-        <div class="flex pt-1 flex-col">
+        <div class="flex pt-1 flex-col pt-4">
             <mat-form-field
                 [ngClass]="formFieldHelpers"
                 class="fuse-mat-textarea flex-auto">
@@ -21,7 +21,7 @@
                     [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
             </mat-form-field>
         </div>
-        <div class="flex flex-col pt-8">
+        <div class="flex flex-col pt-4">
             <mat-form-field class="w-full" appearance="fill">
                 <mat-label>Status</mat-label>
                 <mat-chip-list #chipList aria-label="Status Selection">
