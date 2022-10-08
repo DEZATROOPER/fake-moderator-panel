@@ -96,7 +96,9 @@
                                 mat-cell
                                 *matCellDef="let report">
                                 <span class="pr-6 whitespace-nowrap text-sky-500 dark:text-sky-400 hover:underline">
-                                    <a [attr.href]="report.url" target="_blank">{{report.title}}</a>
+                                    <a [attr.href]="report.url" target="_blank"
+                                       class="truncate whitespace-normal"
+                                    >{{report.title}}</a>
                                 </span>
                             </td>
                         </ng-container>
