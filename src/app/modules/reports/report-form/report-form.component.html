@@ -1,9 +1,60 @@
-<h2 mat-dialog-title>Delete all elements?</h2>
+<h2 mat-dialog-title>Edit report status</h2>
 <mat-dialog-content>
-    {{report.title}}
+    <form class="flex flex-col mt-8 p-8 pb-4 bg-card rounded-2xl shadow overflow-hidden">
+        <div class="flex flex-col">
+            <strong class="w-full block">{{report.title}}</strong>
+            <div class="w-full">{{report.date | date:'MMM dd, y'}}</div>
+            <div class="w-full">Counter: {{report.count}}</div>
+        </div>
+        <div class="flex pt-1 flex-col">
+            <mat-form-field
+                [ngClass]="formFieldHelpers"
+                class="fuse-mat-textarea flex-auto">
+                <mat-label>Analyze result</mat-label>
+                <textarea
+                    matInput
+                    [rows]="3"
+                    matTextareaAutosize></textarea>
+                <mat-icon
+                    class="icon-size-5"
+                    matSuffix
+                    [svgIcon]="'heroicons_solid:location-marker'"></mat-icon>
+            </mat-form-field>
+        </div>
+        <div class="flex flex-col pt-8">
+            <mat-form-field class="w-full" appearance="fill">
+                <mat-label>Status</mat-label>
+                <mat-chip-list #chipList aria-label="Status Selection">
+                    <mat-chip
+                        *ngFor="let status of report.statuses"
+                        (removed)="remove(status)">
+                        {{status}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                    <input
+                        placeholder="Add status"
+                        #statusInput
+                        [formControl]="statusCtrl"
+                        [matAutocomplete]="auto"
+                        [matChipInputFor]="chipList"
+                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                        (matChipInputTokenEnd)="add($event)"
+                        (focus)="statusCtrl.setValue(null)"
+                    >
+                </mat-chip-list>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                    <mat-option *ngFor="let status of statuses$ | async" [value]="status">
+                        {{status}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+    </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true">Cancel</button>
     <!-- The mat-dialog-close directive optionally accepts a value as a result for the dialog. -->
-    <button mat-button [mat-dialog-close]="true">Delete</button>
+    <button mat-button (click)="save()" color="primary">Save</button>
 </mat-dialog-actions>

@@ -11,7 +11,7 @@ enum statuses {
 }
 
 export const reports = {
-    recentTransactions: [
+    reports: [
         {
             id: '1b6fd296-bc6a-4d45-bf4f-e45519a58cf5',
             date: '2022-07-07T22:22:37.274Z',

@@ -63,7 +63,7 @@
                         class="w-full bg-transparent"
                         mat-table
                         matSort
-                        [dataSource]="recentTransactionsDataSource"
+                        [dataSource]="reportsDataSource"
                         [trackBy]="trackByFn"
                         #recentTransactionsTable>
 
@@ -155,11 +155,11 @@
 
                         <tr
                             mat-header-row
-                            *matHeaderRowDef="recentTransactionsTableColumns"></tr>
+                            *matHeaderRowDef="reportsTableColumns"></tr>
                         <tr
                             class="order-row h-16"
                             mat-row
-                            *matRowDef="let row; columns: recentTransactionsTableColumns;"></tr>
+                            *matRowDef="let row; columns: reportsTableColumns;"></tr>
                         <tr
                             class="h-16 border-0"
                             mat-footer-row

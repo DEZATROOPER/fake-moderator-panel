@@ -43,4 +43,8 @@ export class ReportsService
             })
         );
     }
+
+    store(report: any): Observable<any> {
+        return this._httpClient.post('api/reports', report);
+    }
 }

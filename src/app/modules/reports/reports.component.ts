@@ -1,16 +1,22 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core'
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation
+} from '@angular/core'
 import { ReportsService } from './reports.service'
 import { MatSort } from '@angular/material/sort'
 import { MatTableDataSource } from '@angular/material/table'
-import { Subject, takeUntil } from 'rxjs'
+import { Subject, take, takeUntil } from 'rxjs'
 import { MatDialog } from '@angular/material/dialog'
 import { ReportFormComponent } from './report-form/report-form.component'
+import { cloneDeep } from 'lodash-es'
 
-enum StatusType {
-    'danger', 'warning', 'normal'
-}
-
-export enum statuses {
+export enum Statuses {
     'NOT_CONFIRMED' = 'NOT CONFIRMED',
     'WARNING' = 'WARNING',
     'MISLEADING' = 'MISLEADING',
@@ -32,12 +38,15 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('recentTransactionsTable', {read: MatSort}) recentTransactionsTableMatSort: MatSort
 
     data: any
-    recentTransactionsDataSource: MatTableDataSource<any> = new MatTableDataSource()
-    recentTransactionsTableColumns: string[] = ['date', 'title', 'count', 'status']
+    reportsDataSource: MatTableDataSource<any> = new MatTableDataSource()
+    reportsTableColumns: string[] = ['date', 'title', 'count', 'status']
     private _unsubscribeAll: Subject<any> = new Subject<any>()
 
 
-    constructor(private _reportsService: ReportsService, private _dialog: MatDialog) {
+    constructor(private _reportsService: ReportsService,
+                private _dialog: MatDialog,
+                private _changeDetector: ChangeDetectorRef,
+    ) {
     }
 
 
@@ -51,11 +60,10 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
             .subscribe((data) => {
 
                 // Store the data
-                this.data = data
+                this.data = data.reports
 
-                console.log(this.data)
                 // Store the table data
-                this.recentTransactionsDataSource.data = data.recentTransactions
+                this.reportsDataSource.data = this.data
             })
     }
 
@@ -64,7 +72,7 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     ngAfterViewInit(): void {
         // Make the data source sortable
-        this.recentTransactionsDataSource.sort = this.recentTransactionsTableMatSort
+        this.reportsDataSource.sort = this.recentTransactionsTableMatSort
     }
 
     /**
@@ -87,23 +95,42 @@ export class ReportsComponent implements OnInit, AfterViewInit, OnDestroy {
         return item.id || index
     }
 
-    isStatusType(status: string, statusType: 'danger' | 'warning' | 'normal') {
+    isStatusType(status: Statuses, statusType: 'danger' | 'warning' | 'normal') {
         if (statusType === 'normal') {
-            return status === statuses.NOT_CONFIRMED
+            return status === Statuses.NOT_CONFIRMED
         }
 
         if (statusType === 'warning') {
-            return status === statuses.WARNING
+            return status === Statuses.WARNING
         }
 
-        return true;
+        return ![Statuses.NOT_CONFIRMED, Statuses.WARNING].includes(status)
     }
 
     openDialog(report: any) {
-        this._dialog.open(ReportFormComponent, {
+        const dialogRef = this._dialog.open(ReportFormComponent, {
+            panelClass: 'w-1/3',
             data: {
-                report: report
+                report: cloneDeep(report)
             }
-        });
+        })
+
+        dialogRef.afterClosed().pipe(takeUntil(this._unsubscribeAll))
+            .subscribe((result) => {
+                if (!result.report) {
+                    return
+                }
+
+                const findIndex = this.data.findIndex(r => r.id === result.report.id)
+
+                if (findIndex >= 0) {
+                    this.data[findIndex] = result.report
+                } else {
+                    this.data.push(result.report)
+                }
+
+                this.reportsDataSource.data = this.data
+                this._changeDetector.detectChanges()
+            })
     }
 }
